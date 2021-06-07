@@ -15,6 +15,13 @@ import dj_database_url
 
 from pathlib import Path
 import os
+import sys
+
+try:
+    command = sys.argv[1]
+except IndexError:
+    command = "help"
+
 
 env = environ.Env()
 environ.Env.read_env()
@@ -90,12 +97,20 @@ WSGI_APPLICATION = 'purbeurre.wsgi.application'
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 
-DATABASES = {
-    'default': dj_database_url.config(
-        conn_max_age=600,
-        ssl_require=True
-    )
-}
+if command == "test":
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
+else:
+    DATABASES = {
+        'default': dj_database_url.config(
+            conn_max_age=600,
+            ssl_require=True
+        )
+    }
 
 # User custom model
 AUTH_USER_MODEL = 'user.User'
