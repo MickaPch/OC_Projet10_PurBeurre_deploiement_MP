@@ -123,6 +123,13 @@ class ProductImportation(DatabaseCount):
     def __init__(self, product):
         """Check if product is importable and import it."""
 
+        self.codes = list(
+            Products.all.values_list(
+                'code',
+                flat=True
+            )
+        )
+
         self.product = product
         self._check_product()
         if self.importable:
@@ -137,7 +144,6 @@ class ProductImportation(DatabaseCount):
         self.importable = False
         abcde = string.ascii_uppercase[:5]
         product_infos = self.retrieve_product_infos()
-
 
         if (
             product_infos['product_name'] is not None

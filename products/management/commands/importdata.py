@@ -28,7 +28,7 @@ class Command(BaseCommand):
             products = category.get_products_list(pages=5)
 
             for product in products:
-                if DatabaseCount.count < 9000:
-                    ProductImportation(product)
+                # No products limit
+                ProductImportation(product)
 
             i += 1
