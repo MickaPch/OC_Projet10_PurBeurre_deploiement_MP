@@ -105,11 +105,15 @@ if command == "test":
     }
 else:
     DATABASES = {
-        'default': dj_database_url.config(
-            conn_max_age=600,
-            ssl_require=True
-        )
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'ybwe3630_purbeurre',
+        'USER': 'ybwe3630_purbeurre',
+        'PASSWORD': 'pwd4purbeurre$',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
     }
+}
 
 # User custom model
 AUTH_USER_MODEL = 'user.User'
