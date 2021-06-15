@@ -41,7 +41,8 @@ DEBUG = False
 ALLOWED_HOSTS = [
     '127.0.0.1',
     'localhost',
-    'purbeurre-mp.herokuapp.com'
+    'purbeurre-mp.herokuapp.com',
+    'purbeurre.mickapr.fr'
 ]
 
 
