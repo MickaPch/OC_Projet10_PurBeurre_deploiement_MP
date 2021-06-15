@@ -171,7 +171,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATIC_ROOT = '/home/ybwe3630/purbeurre.mickapr.fr/static"
+STATIC_ROOT = '/home/ybwe3630/purbeurre.mickapr.fr/static'
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static/"),
