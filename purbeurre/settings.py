@@ -10,7 +10,6 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import environ
-# import dj_database_url
 
 from pathlib import Path
 import os
@@ -95,7 +94,10 @@ WSGI_APPLICATION = 'purbeurre.wsgi.application'
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 
-if command == "test":
+if (
+    command == "test"
+    or os.getenv('BUILD_ON_TRAVIS', None)
+):
     SECRET_KEY = "d$mlhnh5$@wof5ozs+g_26%w18ixdf8kzzmbz(9wi2k9)x=8xs"
 
     DATABASES = {
@@ -104,6 +106,9 @@ if command == "test":
             'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         }
     }
+
+    PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+    STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
 
 else:
     # SECURITY WARNING: keep the secret key used in production secret!
@@ -120,11 +125,7 @@ else:
         }
     }
 
-try:
     STATIC_ROOT = env('STATIC_ROOT')
-except PermissionError:
-    PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
-    STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
 
 
 # User custom model
@@ -199,9 +200,5 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 INTERNAL_IPS = ['127.0.0.1',]
 
-try:
-    # Configure Django App for Heroku.
-    import django_heroku
-    django_heroku.settings(locals())
-except ImportError:
-    found_heroku = False
+# Fixing Autoprimary keu
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
