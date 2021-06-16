@@ -64,7 +64,7 @@ class ImportCategories(DatabaseCount):
         importable = False
         try:
             Categories.objects.get(
-                name=category['id']
+                name=category['id'].split(':')[1]
             )
         except Categories.DoesNotExist:
             importable = True
