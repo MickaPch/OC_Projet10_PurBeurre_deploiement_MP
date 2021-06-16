@@ -147,28 +147,34 @@ class ProductImportation(DatabaseCount):
         abcde = string.ascii_uppercase[:5]
         product_infos = self.retrieve_product_infos()
 
-        if (
-            product_infos['product_name'] is not None
-            and product_infos['product_code'] not in ProductImportation.codes
-            and product_infos['product_code'] is not None
-            and product_infos['product_url'] is not None
-            and product_infos['image_url'] is not None
-            and product_infos['quantity'] is not None
-            and product_infos['ingredients'] is not None
-            and product_infos['brands'] != []
-            and product_infos['stores'] != []
-            and product_infos['countries'] is not None
-            and product_infos['compare_to'] is not None
-            and product_infos['categories_hierarchy'] is not None
-            and product_infos['nutriscore'] in abcde
-            and all([product_infos[nutriment] >= 0 for nutriment in self.list_nutriments])
-            and Categories.objects.filter(name=product_infos['compare_to']).count() > 0
-        ):
-            self.name = product_infos['product_name']
-            self.product_infos = product_infos
-            self.code = product_infos['product_code']
-            ProductImportation.codes.append(self.code)
-            self.importable = True
+        if product_infos['product_code'] is not None:
+            try:
+                Products.objects.get(
+                    code=product_infos['product_code']
+                )
+            except Products.DoesNotExist:
+                if (
+                    product_infos['product_name'] is not None
+                    and product_infos['product_code'] not in ProductImportation.codes
+                    and product_infos['product_code'] is not None
+                    and product_infos['product_url'] is not None
+                    and product_infos['image_url'] is not None
+                    and product_infos['quantity'] is not None
+                    and product_infos['ingredients'] is not None
+                    and product_infos['brands'] != []
+                    and product_infos['stores'] != []
+                    and product_infos['countries'] is not None
+                    and product_infos['compare_to'] is not None
+                    and product_infos['categories_hierarchy'] is not None
+                    and product_infos['nutriscore'] in abcde
+                    and all([product_infos[nutriment] >= 0 for nutriment in self.list_nutriments])
+                    and Categories.objects.filter(name=product_infos['compare_to']).count() > 0
+                ):
+                    self.name = product_infos['product_name']
+                    self.product_infos = product_infos
+                    self.code = product_infos['product_code']
+                    ProductImportation.codes.append(self.code)
+                    self.importable = True
 
         return self.importable
 
