@@ -124,7 +124,7 @@ class ProductImportation(DatabaseCount):
         """Check if product is importable and import it."""
 
         self.codes = list(
-            Products.all.values_list(
+            Products.objects.all().values_list(
                 'code',
                 flat=True
             )

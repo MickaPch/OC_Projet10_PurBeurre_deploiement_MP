@@ -105,9 +105,6 @@ if command == "test":
         }
     }
 
-    PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
-    STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
-
 else:
     # SECURITY WARNING: keep the secret key used in production secret!
     SECRET_KEY = env("SECRET_KEY")
@@ -123,7 +120,12 @@ else:
         }
     }
 
+try:
     STATIC_ROOT = env('STATIC_ROOT')
+except PermissionError:
+    PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+    STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
+
 
 # User custom model
 AUTH_USER_MODEL = 'user.User'
