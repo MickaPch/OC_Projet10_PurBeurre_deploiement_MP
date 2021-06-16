@@ -32,8 +32,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -98,23 +96,34 @@ WSGI_APPLICATION = 'purbeurre.wsgi.application'
 
 
 if command == "test":
+    SECRET_KEY = "d$mlhnh5$@wof5ozs+g_26%w18ixdf8kzzmbz(9wi2k9)x=8xs"
+
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         }
     }
+
+    PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
 else:
+    # SECURITY WARNING: keep the secret key used in production secret!
+    SECRET_KEY = env("SECRET_KEY")
+
     DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'ybwe3630_purbeurre',
-        'USER': 'ybwe3630_purbeurre',
-        'PASSWORD': 'pwd4purbeurre$',
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': env('DB_NAME'),
+            'USER': env('DB_USER'),
+            'PASSWORD': env('DB_PASSWORD'),
+            'HOST': '127.0.0.1',
+            'PORT': '3306',
+        }
     }
-}
+
+    STATIC_ROOT = env('STATIC_ROOT')
 
 # User custom model
 AUTH_USER_MODEL = 'user.User'
@@ -170,8 +179,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
-
-STATIC_ROOT = '/home/ybwe3630/purbeurre.mickapr.fr/static'
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static/"),
