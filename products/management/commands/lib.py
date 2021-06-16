@@ -68,6 +68,8 @@ class ImportCategories(DatabaseCount):
             )
         except Categories.DoesNotExist:
             importable = True
+        except:
+            importable = False
 
         return importable
 
@@ -256,6 +258,8 @@ class ProductImportation(DatabaseCount):
             )
         except Categories.DoesNotExist:
             compare_to = None
+        except:
+            importable = False
 
         # CATEGORIES HIERARCHY
         try:
@@ -311,9 +315,12 @@ class ProductImportation(DatabaseCount):
         super().new_entry()
 
         if Categories.objects.all().count() > 0:
-            category_compare = Categories.objects.get(
-                name=self.product_infos['compare_to']
-            )
+            try:
+                category_compare = Categories.objects.get(
+                    name=self.product_infos['compare_to']
+                )
+            except:
+                category_compare = None
         else:
             category_compare = None
 
@@ -369,6 +376,8 @@ class ProductImportation(DatabaseCount):
                     product=self.product_object,
                     category=parent_category
                 )
+            except:
+                pass
             if i < len(self.product_infos['categories_hierarchy']) - 1:
                 try:
                     child_category = Categories.objects.get(
@@ -385,6 +394,8 @@ class ProductImportation(DatabaseCount):
                         child=child_category
                     )
                 except Categories.DoesNotExist:
+                    pass
+                except:
                     pass
             i += 1
 
@@ -409,6 +420,8 @@ class ProductImportation(DatabaseCount):
                 brand = Brands.objects.create(
                     name=product_brand
                 )
+            except:
+                pass
             try:
                 ProdBrand.objects.get(
                     product=self.product_object,
@@ -420,6 +433,8 @@ class ProductImportation(DatabaseCount):
                     product=self.product_object,
                     brand=brand
                 )
+            except:
+                pass
 
         return brands
 
@@ -442,6 +457,8 @@ class ProductImportation(DatabaseCount):
                 store = Stores.objects.create(
                     name=product_store
                 )
+            except:
+                pass
             try:
                 ProdStore.objects.get(
                     product=self.product_object,
@@ -453,5 +470,7 @@ class ProductImportation(DatabaseCount):
                     product=self.product_object,
                     store=store
                 )
+            except:
+                pass
 
         return stores
