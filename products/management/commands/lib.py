@@ -311,7 +311,7 @@ class ProductImportation(DatabaseCount):
             try:
                 product_infos[nutriment] = float(nutriments[nutriment])
             except KeyError:
-                product_infos[nutriment] = -1
+                product_infos[nutriment] = 0
 
         return product_infos
 
